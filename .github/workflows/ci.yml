@@ -24,7 +24,7 @@ jobs:
     - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5
       with:
         go-version: '1.23.2'
-        cache: true  # Enables Go modules cache
+        cache: true
         
     - name: Set GOVERSION environment variable (Linux/macOS)
       if: runner.os != 'Windows'
@@ -41,13 +41,12 @@ jobs:
 
     # Cache for staticcheck binary
     - name: Cache staticcheck
+      id: cache-staticcheck
       uses: actions/cache@v4
       with:
         path: |
-          ~/go/bin/staticcheck                # Linux/macOS
-          ~/go/bin/staticcheck.exe            # Windows
-          %USERPROFILE%\go\bin\staticcheck.exe  # Windows alternative path
-        key: ${{ runner.os }}-staticcheck-${{ hashFiles('go.sum') }}
+          ${{ runner.os == 'Windows' && '~\go\bin\staticcheck.exe' || '~/go/bin/staticcheck' }}
+        key: ${{ runner.os }}-staticcheck-${{ hashFiles('go.mod') }}
         restore-keys: |
           ${{ runner.os }}-staticcheck-
 
@@ -70,13 +69,14 @@ jobs:
         go install -v honnef.co/go/tools/cmd/staticcheck@latest
         echo "$GOBIN" | Out-File -FilePath $env:GITHUB_PATH -Append
 
-    - name: Add staticcheck to PATH (Linux/macOS)
-      if: runner.os != 'Windows'
-      run: echo "~/go/bin" >> $GITHUB_PATH
-
-    - name: Add staticcheck to PATH (Windows)
-      if: runner.os == 'Windows'
+    # Add staticcheck to PATH only if it was restored from cache
+    - name: Add cached staticcheck to PATH (Windows)
+      if: runner.os == 'Windows' && steps.cache-staticcheck.outputs.cache-hit == 'true'
       run: echo "$HOME\go\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+    - name: Add cached staticcheck to PATH (Linux/macOS)
+      if: runner.os != 'Windows' && steps.cache-staticcheck.outputs.cache-hit == 'true'
+      run: echo "$HOME/go/bin" >> $GITHUB_PATH
 
     - name: Run staticcheck
       run: staticcheck ./...
@@ -91,4 +91,3 @@ jobs:
       if: runner.os == 'Linux'
       shell: script -q -e -c "bash {0}"
       run: go run main.go -- main.go
-  
