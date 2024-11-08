@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5
       with:
-        go-version: '1.23.0'
+        go-version: '1.23.2'  # Changed from 1.23.0 to match module requirement
         
     - name: Set GOVERSION environment variable (Linux/macOS)
       if: runner.os != 'Windows'
@@ -46,6 +46,7 @@ jobs:
         fi
         echo "Installing staticcheck to $GOBIN"
         go install -v honnef.co/go/tools/cmd/staticcheck@latest
+        echo "Installed staticcheck version: $(staticcheck --version)"
         echo "$GOBIN" >> $GITHUB_PATH
 
     - name: Run staticcheck
