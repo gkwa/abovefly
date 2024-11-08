@@ -42,7 +42,7 @@ jobs:
     # Cache for staticcheck binary
     - name: Cache staticcheck
       id: cache-staticcheck
-      uses: actions/cache@v4
+      uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4
       with:
         path: |
           ${{ runner.os == 'Windows' && '~\go\bin\staticcheck.exe' || '~/go/bin/staticcheck' }}
