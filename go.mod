@@ -1,6 +1,8 @@
 module github.com/gkwa/abovefly
 
-go 1.23.2
+go 1.24.0
+
+toolchain go1.24.2
 
 require (
 	github.com/fatih/color v1.18.0
