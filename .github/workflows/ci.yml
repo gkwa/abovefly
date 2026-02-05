@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - uses: actions/setup-go@a5f9b05d2d216f63e13859e0d847461041025775
       with:
-        go-version: '1.25.6'
+        go-version: '1.25.7'
         cache: true
     - name: Set GOVERSION environment variable (Linux/macOS)
       if: runner.os != 'Windows'
