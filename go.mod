@@ -7,7 +7,7 @@ toolchain go1.26.5
 require (
 	github.com/fatih/color v1.19.0
 	github.com/go-git/go-git/v5 v5.19.1
-	github.com/go-logr/logr v1.4.3
+	github.com/go-logr/logr v1.4.4
 	github.com/go-logr/zerologr v1.2.3
 	github.com/google/go-containerregistry v0.21.7
 	github.com/magefile/mage v1.17.2
